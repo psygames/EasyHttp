@@ -4,10 +4,26 @@ namespace EasyHttp
 {
     class Program
     {
+        class Item
+        {
+            public string key;
+            public int value;
+            public string info;
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            DownloadTest();
+            // DownloadTest();
+
+            var db = new DB<Item>();
+            db.Set("1", new Item() { key = "1", info = "safsfa", value = 222 });
+            db.Set("2", new Item() { key = "2", info = "geahath", value = 3333 });
+            db.Save("item.txt");
+            db.Load("item.txt");
+
+            Console.WriteLine(db.Get(a => a.value == 222).info);
+
             Console.ReadLine();
         }
 

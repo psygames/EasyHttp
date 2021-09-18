@@ -24,15 +24,6 @@ namespace EasyHttp
             return InnerHttp.Download(url, path, progress, proxy);
         }
 
-        private static void LogError(string log)
-        {
-#if UNITY_5_3_OR_NEWER
-            UnityEngine.Debug.LogError($"[EasyHttp][Error] {log}");
-#else
-            Console.WriteLine($"[EasyHttp][Error] {log}");
-#endif
-        }
-
         static class InnerHttp
         {
             // Windows
@@ -94,7 +85,7 @@ namespace EasyHttp
                 }
                 catch (Exception ex)
                 {
-                    LogError(ex.Message);
+                    Log.Error(ex);
                 }
                 return false;
             }
@@ -132,7 +123,7 @@ namespace EasyHttp
                 }
                 catch (Exception ex)
                 {
-                    LogError(ex.Message);
+                    Log.Error(ex.Message);
                 }
                 return null;
             }
@@ -163,7 +154,7 @@ namespace EasyHttp
                 }
                 catch (Exception ex)
                 {
-                    LogError(ex.Message);
+                    Log.Error(ex.Message);
                 }
                 return null;
             }
