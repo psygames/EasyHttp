@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyHttp", "EasyHttp\EasyHttp.csproj", "{8F75A3FB-FB60-4E12-AA5B-5EA5837E2988}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyHttp", "src\EasyHttp\EasyHttp.csproj", "{8804F52C-B9EF-4610-B8BA-86AA0F21087E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "tests\Test\Test.csproj", "{BE5BBF25-0704-4CE8-9FE5-C9AD0704F383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8F75A3FB-FB60-4E12-AA5B-5EA5837E2988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F75A3FB-FB60-4E12-AA5B-5EA5837E2988}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F75A3FB-FB60-4E12-AA5B-5EA5837E2988}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F75A3FB-FB60-4E12-AA5B-5EA5837E2988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8804F52C-B9EF-4610-B8BA-86AA0F21087E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8804F52C-B9EF-4610-B8BA-86AA0F21087E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8804F52C-B9EF-4610-B8BA-86AA0F21087E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8804F52C-B9EF-4610-B8BA-86AA0F21087E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5BBF25-0704-4CE8-9FE5-C9AD0704F383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5BBF25-0704-4CE8-9FE5-C9AD0704F383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5BBF25-0704-4CE8-9FE5-C9AD0704F383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5BBF25-0704-4CE8-9FE5-C9AD0704F383}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
