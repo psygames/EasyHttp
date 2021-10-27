@@ -7,7 +7,135 @@ namespace EasyUtils
 {
     public static class MuEncode
     {
-        //现代汉语常用3500字
+        static Dictionary<char, List<string>> alphaNumsMap = null;
+        static Dictionary<string, char> alphaNumsMapDec = null;
+        static Random random = new Random();
+
+        private static void InitAlphaNumsMap()
+        {
+            if (alphaNumsMap != null)
+                return;
+            alphaNumsMap = new Dictionary<char, List<string>>();
+            alphaNumsMapDec = new Dictionary<string, char>();
+
+            for (int i = 0; i < 62; i++)
+            {
+                if (i < 26) alphaNumsMap[(char)('a' + i)] = new List<string>();
+                else if (i < 52) alphaNumsMap[(char)('A' + i - 26)] = new List<string>();
+                else if (i < 62) alphaNumsMap[(char)('0' + i - 52)] = new List<string>();
+
+            }
+
+            for (int i = 0; i < hanzi.Length; i++)
+            {
+                var ii = i % 62;
+                var zi = hanzi[i];
+                char c;
+
+                if (ii < 26) c = (char)('a' + ii);
+                else if (ii < 52) c = (char)('A' + ii - 26);
+                else c = (char)('0' + ii - 52);
+
+                alphaNumsMap[c].Add(zi);
+                alphaNumsMapDec.Add(zi, c);
+            }
+        }
+
+        public static bool EncodeAlphaNums(string input, out string output)
+        {
+            // a-z & A-Z & 0-9 
+            // total 26+26+10 = 62 in order
+            InitAlphaNumsMap();
+            var sb = new StringBuilder();
+            var chars = input.ToCharArray();
+
+            for (int i = 0; i < chars.Length; i++)
+            {
+                var c = chars[i];
+                if (c >= 'a' && c <= 'z'
+                    || c >= 'A' && c <= 'Z'
+                    || c >= '0' && c <= '9')
+                {
+                    var lst = alphaNumsMap[c];
+                    var s = lst[random.Next(0, lst.Count)];
+                    sb.Append(s);
+                }
+                else
+                {
+                    output = null;
+                    return false;
+                }
+            }
+
+            output = sb.ToString();
+            return true;
+        }
+
+        public static bool DecodeAlphaNums(string input, out string output)
+        {
+            InitAlphaNumsMap();
+            var sb = new StringBuilder();
+            var chars = input.ToCharArray();
+
+            for (int i = 0; i < chars.Length; i++)
+            {
+                var s = chars[i].ToString();
+                if (alphaNumsMapDec.TryGetValue(s, out var c))
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    output = null;
+                    return false;
+                }
+            }
+
+            output = sb.ToString();
+            return true;
+        }
+
+        static readonly string dotTag = "XdOt";
+        public static bool EncodeX(string filename, out string output)
+        {
+            var name = Path.GetFileNameWithoutExtension(filename);
+            var ext = Path.GetExtension(filename).Substring(1);
+            bool isEnc = EncodeAlphaNums(dotTag + ext, out var enc);
+            if (isEnc) output = name + enc;
+            else output = null;
+            return isEnc;
+        }
+
+        public static bool DecodeX(string filename, out string output)
+        {
+            // 文件名至少有一个字符
+            var ext = "";
+            int i = 0;
+            for (i = filename.Length - 1; i >= 1; i--)
+            {
+                if (DecodeAlphaNums(filename[i].ToString(), out var dec))
+                {
+                    ext = dec + ext;
+                }
+                else
+                {
+                    output = null;
+                    return false;
+                }
+
+                if (ext.StartsWith(dotTag))
+                {
+                    break;
+                }
+            }
+
+            ext = ext.Substring(dotTag.Length);
+            var name = filename.Substring(0, i);
+            output = name + "." + ext;
+            return true;
+        }
+
+        #region 现代汉语常用3500字
         static readonly string[] hanzi =
         {
             "一","乙","二","十","丁","厂","七","卜","八","人","入","儿","九","几","了","乃","刀","力","又","三","干","于","亏","士","土"
@@ -151,134 +279,7 @@ namespace EasyUtils
             ,"魏","簇","儡","徽","爵","朦","臊","鳄","糜","癌","懦","豁","臀","藕","藤","瞻","嚣","鳍","癞","瀑","襟","璧","戳","攒","孽"
             ,"蘑","藻","蹭","蹬","簸","簿","蟹","靡","癣","羹","鳖","鬓","攘","蠕","巍","鳞","糯","譬","霹","躏","髓","蘸","镶","瓤","矗"
         };
+        #endregion
 
-        static Dictionary<char, List<string>> alphaNumsMap = null;
-        static Dictionary<string, char> alphaNumsMapDec = null;
-        static Random random = new Random();
-
-        private static void InitAlphaNumsMap()
-        {
-            if (alphaNumsMap != null)
-                return;
-            alphaNumsMap = new Dictionary<char, List<string>>();
-            alphaNumsMapDec = new Dictionary<string, char>();
-
-            for (int i = 0; i < 62; i++)
-            {
-                if (i < 26) alphaNumsMap[(char)('a' + i)] = new List<string>();
-                else if (i < 52) alphaNumsMap[(char)('A' + i - 26)] = new List<string>();
-                else if (i < 62) alphaNumsMap[(char)('0' + i - 52)] = new List<string>();
-
-            }
-
-            for (int i = 0; i < hanzi.Length; i++)
-            {
-                var ii = i % 62;
-                var zi = hanzi[i];
-                char c;
-
-                if (ii < 26) c = (char)('a' + ii);
-                else if (ii < 52) c = (char)('A' + ii - 26);
-                else c = (char)('0' + ii - 52);
-
-                alphaNumsMap[c].Add(zi);
-                alphaNumsMapDec.Add(zi, c);
-            }
-        }
-
-        public static bool EncodeAlphaNums(string input, out string output)
-        {
-            // a-z & A-Z & 0-9 
-            // total 26+26+10 = 62 in order
-            InitAlphaNumsMap();
-            var sb = new StringBuilder();
-            var chars = input.ToCharArray();
-
-            for (int i = 0; i < chars.Length; i++)
-            {
-                var c = chars[i];
-                if (c >= 'a' && c <= 'z'
-                    || c >= 'A' && c <= 'Z'
-                    || c >= '0' && c <= '9')
-                {
-                    var lst = alphaNumsMap[c];
-                    var s = lst[random.Next(0, lst.Count)];
-                    sb.Append(s);
-                }
-                else
-                {
-                    output = null;
-                    return false;
-                }
-            }
-
-            output = sb.ToString();
-            return true;
-        }
-
-        public static bool DecodeAlphaNums(string input, out string output)
-        {
-            InitAlphaNumsMap();
-            var sb = new StringBuilder();
-            var chars = input.ToCharArray();
-
-            for (int i = 0; i < chars.Length; i++)
-            {
-                var s = chars[i].ToString();
-                if (alphaNumsMapDec.TryGetValue(s, out var c))
-                {
-                    sb.Append(c);
-                }
-                else
-                {
-                    output = null;
-                    return false;
-                }
-            }
-
-            output = sb.ToString();
-            return true;
-        }
-
-        static readonly string dotTag = "XdOt";
-        public static bool EncodeX(string filename, out string output)
-        {
-            var name = Path.GetFileNameWithoutExtension(filename);
-            var ext = Path.GetExtension(filename).Substring(1);
-            bool isEnc = EncodeAlphaNums(dotTag + ext, out var enc);
-            if (isEnc) output = name + enc;
-            else output = null;
-            return isEnc;
-        }
-
-        public static bool DecodeX(string filename, out string output)
-        {
-            // 文件名至少有一个字符
-            var ext = "";
-            int i = 0;
-            for (i = filename.Length - 1; i >= 1; i--)
-            {
-                if (DecodeAlphaNums(filename[i].ToString(), out var dec))
-                {
-                    ext = dec + ext;
-                }
-                else
-                {
-                    output = null;
-                    return false;
-                }
-
-                if (ext.StartsWith(dotTag))
-                {
-                    break;
-                }
-            }
-
-            ext = ext.Substring(dotTag.Length);
-            var name = filename.Substring(0, i);
-            output = name + "." + ext;
-            return true;
-        }
     }
-
 }
