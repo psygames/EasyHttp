@@ -9,3 +9,6 @@ src/EasyHttp/bin/
 src/EasyHttp/obj/
 tests/Test/bin/
 tests/Test/obj/
+src/EasyUtils/obj/
+src/EasyUtils/bin/
+src/EasyUtils/Utils.csproj.user

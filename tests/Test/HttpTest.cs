@@ -1,16 +1,15 @@
 using EasyUtils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Test
 {
     [TestClass]
-    public class HttpFullTest
+    public class HttpTest
     {
         [TestMethod]
-        public async Task TestMethod1()
+        public async Task HttpGet()
         {
             Http http = new Http();
             var json = await http.GetText("http://www.baidu.com");
