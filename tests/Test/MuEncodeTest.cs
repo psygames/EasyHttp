@@ -29,8 +29,14 @@ namespace Test
             var f = File.OpenWrite("a.txt");
             for (int i = 0; i < 1000000; i++)
             {
+
                 var src = "测试aa文件.as";
                 var isEnc = MuEncode.EncodeX(src, out var enc);
+                var isDec = MuEncode.DecodeX(enc, out var dec);
+
+                Assert.IsTrue(isEnc);
+                Assert.IsTrue(isDec);
+                Assert.AreEqual(src, dec);
                 if (check.TryGetValue(enc, out var count))
                 {
                     check[enc] = count + 1;
@@ -40,10 +46,6 @@ namespace Test
                 {
                     check[enc] = 1;
                 }
-                Assert.IsTrue(isEnc);
-                var isDec = MuEncode.DecodeX(enc, out var dec);
-                Assert.IsTrue(isDec);
-                Assert.AreEqual(src, dec);
                 f.Write(Encoding.UTF8.GetBytes(src + " => " + enc + "\n"));
             }
             f.Write(Encoding.UTF8.GetBytes("Same Count: " + sameCount + "\n"));
